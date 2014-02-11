@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import requests
+import logging
 
 ''' Make a request to the CloudFlare API '''
 def api_request(action, **kwargs):
@@ -57,10 +58,19 @@ def main():
 	globals()['config'] = {}
 	execfile('config.py', config)
 
+	# Set up logging
+	logging.basicConfig(
+		format='%(asctime)s [%(levelname)s] %(message)s',
+		datefmt='%Y/%m/%d %H:%M:%S',
+		level=getattr(logging, config['loglevel']))
+
+	# Disable requests INFO messages
+	logging.getLogger('requests').setLevel(logging.WARNING)
+	
 	# Get the machine's external IP
 	config['ext_ip'] = external_ip()
 
-	print 'Requesting list of records...'
+	logging.info('Requesting list of records...')
 	# Get the list of records
 	records = api_request('rec_load_all', z = config['zone'])['recs']['objs']
 	
@@ -69,10 +79,10 @@ def main():
 		if (record['type'] == 'A') and (record['name'] in config['domains']):
 			if  (record['content'] == config['ext_ip']) and (record['ttl'] == str(config['ttl'])):
 				# Change is not necessary - The IP and config['ttl'] are good.
-				print '%s doesn\'t need any change.' % record['name']
+				logging.info('%s doesn\'t need any change.' % record['name'])
 			else:
 				# Change is necessary
-				print 'Changing record %s...' % record['name']
+				logging.info('Changing record %s...' % record['name'])
 				api_request('rec_edit',
 					z = config['zone'],
 					id = record['rec_id'],
