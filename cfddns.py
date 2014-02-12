@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 """
 
 import requests
+import os
 import logging
 
 ''' Make a request to the CloudFlare API '''
@@ -56,7 +57,7 @@ def external_ip():
 def main():
 	# Get the configurations from the config file
 	globals()['config'] = {}
-	execfile('config.py', config)
+	execfile(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'config.py'), config)
 
 	# Set up logging
 	logging.basicConfig(
