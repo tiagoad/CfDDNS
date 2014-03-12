@@ -47,12 +47,12 @@ def api_request(action, **kwargs):
 
 ''' Get the machine's external IP '''
 def external_ip():
-	r = requests.get('http://api.externalip.net/ip')
+	r = requests.get('http://my-ip.heroku.com/')
 	
 	if r.status_code != 200:
 		raise Exception(r.text)
 	else:
-		return r.text
+		return r.text.replace('\n', '')
 
 def main():
 	# Get the configurations from the config file
