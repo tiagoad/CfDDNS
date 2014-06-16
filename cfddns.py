@@ -77,7 +77,7 @@ def main():
 	
 	# Iterate over every records, and change the specified ones
 	for record in records:
-		if (record['type'] == 'A') and (record['name'] in config['domains']):
+		if (record['type'] == 'A') and (record['display_name'] in config['domains']):
 			if  (record['content'] == config['ext_ip']) and (record['ttl'] == str(config['ttl'])):
 				# Change is not necessary - The IP and config['ttl'] are good.
 				logging.info('%s doesn\'t need any change.' % record['name'])
