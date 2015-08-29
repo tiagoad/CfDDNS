@@ -47,7 +47,7 @@ def api_request(action, **kwargs):
 
 ''' Get the machine's external IP '''
 def external_ip():
-	r = requests.get('http://my-ip.heroku.com/')
+	r = requests.get('https://api.ipify.org')
 	
 	if r.status_code != 200:
 		raise Exception(r.text)
